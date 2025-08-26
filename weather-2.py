@@ -127,34 +127,77 @@ app = Flask(__name__)
 
 HTML_PAGE = """
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Weather in {{ city }}</title>
-    <meta charset="utf-8"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-    <style>
-        #map { height: 400px; }
-        body { font-family: Arial, sans-serif; padding: 20px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App UI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #f3f4f6;
+    }
+    .weather-card {
+      margin-top: 50px;
+      width: 800px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      background: #fff;
+    }
+    .weather-header {
+      background: url("{{ bg_url }}");
+    #   color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .temperature { font-size: 64px; font-weight: bold; margin: 10px 0; }
+    .icon { font-size: 48px; }
+    .weather-info { padding: 15px; background: #fafafa; }
+    .weather-info p { margin: 5px 0; font-size: 16px; }
+    .highlight { font-weight: bold; color: #333; }
+    .speak-btn {
+      margin-top: 10px;
+      padding: 8px 15px;
+      border: none;
+      background: #3b82f6;
+      color: white;
+      font-size: 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .speak-btn:hover { background: #2563eb; }
+  </style>
 </head>
 <body>
-    <h1>Weather in {{ city }}</h1>
-    <p><b>English:</b> {{ message_en }}</p>
-    <p><b>Khmer:</b> {{ message_kh }}</p>
-    <div id="map"></div>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        var map = L.map('map').setView([{{ lat }}, {{ lon }}], 12);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-        L.marker([{{ lat }}, {{ lon }}]).addTo(map)
-            .bindPopup('{{ city }}: {{ temp }}°C, {{ weather_desc }}')
-            .openPopup();
-    </script>
+  <div class="weather-card">
+    <div class="weather-header">
+      <h2>{{ city }}</h2>
+      <div class="temperature">{{ temp }}°C</div>
+      <div class="icon">{{ icon }}</div>
+      <p>{{ weather_desc }}</p>
+    </div>
+    <div class="weather-info">
+      <p><b>English:</b> {{ message_en }}</p>
+      <p><b>Khmer:</b> <span id="khmer-msg">{{ message_kh }}</span></p>
+      
+      <!-- Khmer speech -->
+      <audio id="khmerAudio" src="/static/khmer_weather.mp3"></audio>
+      <button class="speak-btn" onclick="document.getElementById('khmerAudio').play()">🔊 Speak Khmer</button>
+
+      <p>💧 Humidity: <span class="highlight">{{ humidity }}%</span></p>
+      <p>💨 Wind: <span class="highlight">{{ wind }} km/h</span></p>
+    </div>
+  </div>
 </body>
 </html>
 """
+
 
 @app.route("/")
 def home():
