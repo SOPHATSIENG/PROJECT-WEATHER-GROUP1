@@ -158,8 +158,8 @@ def home():
 # Sky Whisper Auto Reminder
 # --------------------------
 def sky_whisper_task():
-    set_hour = 11   # change this
-    set_minute = 27 # change this
+    set_hour = 20   # change this
+    set_minute = 21# change this
     print(f"Sky Whisper waiting for {set_hour:02d}:{set_minute:02d}...")
 
     while True:
